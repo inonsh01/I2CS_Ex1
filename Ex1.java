@@ -310,11 +310,40 @@ public class Ex1 {
    */
   public static double area(double[] p1, double[] p2, double x1, double x2, int numberOfTrapezoid) {
     double ans = 0;
-    /**
-     * add you code below
-     * 
-     * ///////////////////
-     */
+    // add you code below
+    // ---------------
+
+    double currX, nextX;
+    // define step by length of the range devide by number of Trapezoids
+    double step = Math.abs(x2 - x1) / numberOfTrapezoid;
+
+    // find the diffrence polynomial function
+    double[] subPol = subtract(p1, p2);
+
+    // loop over every segment
+    for (int i = 0; i < numberOfTrapezoid; i++) {
+      // define this x and the next ( + step)
+      currX = x1 + (step * i);
+      nextX = currX + step;
+
+      // if on of them small then 0
+      if (f(subPol, currX) * f(subPol, nextX) < 0) {
+
+        // find the root of the substract polynomial function
+        double r = root_rec(subPol, currX, nextX, 0.0001);
+
+        // calculate from current x till root
+        ans += generalArea(p1, p2, currX, r);
+        // calculate from root till x + step
+        ans += generalArea(p1, p2, r, nextX);
+
+        // if current segment not crossing root, calculate as usual
+      } else {
+        ans += generalArea(p1, p2, currX, nextX);
+      }
+    }
+
+    // ---------------
     return ans;
   }
 
@@ -409,9 +438,9 @@ public class Ex1 {
    * This function computes the polynomial function which is the sum of two
    * polynomial functions (p1,p2)
    * 
-   * @param p1
-   * @param p2
-   * @return
+   * @param p1 - first polynomial function
+   * @param p2 - second polynomial function
+   * @return - the sum function of the polynomails
    */
   public static double[] add(double[] p1, double[] p2) {
     double[] ans = ZERO;
@@ -448,9 +477,9 @@ public class Ex1 {
    * This function computes the polynomial function which is the multiplication of
    * two polynoms (p1,p2)
    * 
-   * @param p1
-   * @param p2
-   * @return
+   * @param p1 - first polynomial function
+   * @param p2 - second polynomial function
+   * @return - the multiplication function
    */
   public static double[] mul(double[] p1, double[] p2) {
     double[] ans = ZERO;//
@@ -476,8 +505,8 @@ public class Ex1 {
   /**
    * This function computes the derivative of the p0 polynomial function.
    * 
-   * @param po
-   * @return
+   * @param po - polynomial function
+   * @return - the derivative function
    */
   public static double[] derivative(double[] po) {
     double[] ans = ZERO;//
@@ -525,5 +554,66 @@ public class Ex1 {
     }
     // all the values are 0, return true
     return true;
+  }
+
+  /**
+   * * Given two polynomial functions (p1,p2), a range [x1,x2]
+   * This function is general function to computes an approximation of the area
+   * between the polynomial
+   * functions within the x-range.
+   * 
+   * @param p1 - first polynomial function
+   * @param p2 - second polynomial function
+   * @param x1 - start value of x to calculate
+   * @param x2 - start value of xto calculate
+   * @return the approximated area between the two polynomial functions within the
+   *         [x1,x2] range.
+   */
+  public static double generalArea(double[] p1, double[] p2, double x1, double x2) {
+    double ans = 0;
+
+    // calc width - distance between x-ses
+    double width = Math.abs(x2 - x1);
+
+    // find first point's y minus the second at absolute value it gives the height
+    double h1 = Math.abs(f(p1, x1) - f(p2, x1));
+    double h2 = Math.abs(f(p1, x2) - f(p2, x2));
+
+    // algorithem to find area of Trapezoid is (height's sum * width / 2)
+    // here the step defind as a width
+    ans += (h1 + h2) * width / 2.0;
+    return ans;
+  }
+
+  /**
+   * This function computes the polynomial function which is the subtract of two
+   * polynomial functions (p1,p2)
+   * 
+   * @param p1 - first polynomial function
+   * @param p2 - second polynomial function
+   * @return the subtract function of the polynomails
+   */
+  public static double[] subtract(double[] p1, double[] p2) {
+
+    double ceo1, ceo2;
+    // define the lenght by the longer polynom
+    int length = Math.max(p1.length, p2.length);
+
+    // define new answer array with max length
+    double[] ans = new double[length];
+
+    // loop over the polynoms
+    for (int i = 0; i < length; i++) {
+
+      // inline way to insert into coefficient -
+      // if index smaller them the max degree, return coefficient in this index.
+      // else return 0.0 (0*^i)
+      ceo1 = (i < p1.length) ? p1[i] : 0.0;
+      ceo2 = (i < p2.length) ? p2[i] : 0.0;
+
+      // subtract coefficients
+      ans[i] = ceo1 - ceo2;
+    }
+    return ans;
   }
 }
