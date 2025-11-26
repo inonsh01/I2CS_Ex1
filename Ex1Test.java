@@ -141,6 +141,9 @@ class Ex1Test {
 		double[] p = { -1.1, 2.3, 3.1 }; // 3.1X^2+ 2.3x -1.1
 		double[] p4 = { -1.1, 0, 0, 2.3, 0, 3.1 };
 		String sp2 = "3.1x^2 +2.3x -1.1";
+
+		// add another check - if the polynimal not have the all "middle" degrees -
+		// (if the max degree is 5, what happends if ^4 coefficient is zero? etc.)
 		String sp3 = "3.1x^5 +2.3x^3 -1.1";
 		String sp = Ex1.poly(p);
 		double[] p1 = Ex1.getPolynomFromString(sp);
@@ -238,14 +241,19 @@ class Ex1Test {
 	 * Test the isAllZero function.
 	 */
 	public void testIsAllZero() {
+		// define few polynomail function
 		double[] po_a = { 0, 0, 0, 0, 0, 0, 0, 0 };
 		double[] po_b = { 0, 0, 0 };
 		double[] po_c = { 0, 0, 0, 0, 1, 0, 0, 0 };
 		double[] po_d = { 0, 0, -1 };
+
+		// call to isAllZero function with the polynomial function
 		boolean a1 = Ex1.isAllZero(po_a, 0);
 		boolean a2 = Ex1.isAllZero(po_b, 0);
 		boolean a3 = Ex1.isAllZero(po_c, 0);
 		boolean a4 = Ex1.isAllZero(po_d, 0);
+
+		// test true if everything is zero, otherwise test is false.
 		assertTrue(a1);
 		assertTrue(a2);
 		assertFalse(a3);
@@ -257,23 +265,53 @@ class Ex1Test {
 	 * Test the PolynomFromPoints function.
 	 */
 	public void testPolynomFromPoints() {
+		// define first 3 of 2D points and polynomial function
 		double[] xx_a = { 0, 1, -1 };
 		double[] yy_a = { 0, 1, 1 };
 		double[] pol_a = { 0.0, 0.0, 1.0 };
 
+		// define second 3 of 2D points and polynomial function
 		double[] xx_b = { 0, 1, 4 };
 		double[] yy_b = { 3, 0, 3 };
 		double[] pol_b = { 3, -4, 1 };
 
+		// define thhird 3 of 2D points not in the same length to get null
 		double[] xx_c = { 0, 1, -1 };
 		double[] yy_c = { 0, 1, 1, 4 };
 
+		// calls to PolynomFromPoints function with the arguments
 		double[] p1 = Ex1.PolynomFromPoints(xx_a, yy_a);
 		double[] p2 = Ex1.PolynomFromPoints(xx_b, yy_b);
 		double[] p3 = Ex1.PolynomFromPoints(xx_c, yy_c);
 
+		// test everyone to it pair
 		assertArrayEquals(p1, pol_a, Ex1.EPS);
 		assertArrayEquals(p2, pol_b, Ex1.EPS);
 		assertEquals(p3, null);
+	}
+
+	@Test
+	/**
+	 * Test the length function.
+	 */
+	public void length() {
+
+		// define examples returns from length function
+		double a1 = Ex1.length(po3, 4, 20, 8);
+		double a2 = Ex1.length(po3, 3, 19, 30);
+		double a3 = Ex1.length(po3, -4, 2, 40);
+		double a4 = Ex1.length(po3, -100, 100, 10);
+
+		// internet calculation
+		double r1 = 2783.8097;
+		double r2 = 2241.2346;
+		double r3 = 12.2471;
+		double r4 = 3986000.1488;
+
+		// check each with is pair
+		assertEquals(a1, r1, Ex1.EPS);
+		assertEquals(a2, r2, Ex1.EPS);
+		assertEquals(a3, r3, Ex1.EPS);
+		assertEquals(a4, r4, Ex1.EPS);
 	}
 }

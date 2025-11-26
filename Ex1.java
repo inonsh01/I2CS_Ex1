@@ -267,11 +267,26 @@ public class Ex1 {
    */
   public static double length(double[] p, double x1, double x2, int numberOfSegments) {
     double ans = x1;
-    /**
-     * add you code below
-     * 
-     * ///////////////////
-     */
+    // add you code below
+    // -----------------
+
+    double x;
+    // reset ans
+    ans = 0.0;
+
+    // define step by length of the range devide by number of segments
+    double step = Math.abs(x2 - x1) / numberOfSegments;
+
+    // loop over every segment
+    for (int i = 0; i < numberOfSegments; i++) {
+      // current x is the start point + number of steps
+      // depends on current index of segment
+      x = x1 + (step * i);
+      // calculate length (using pythagoras) of segment and add it to answer
+      ans += Math.sqrt(Math.pow(step, 2) + Math.pow(f(p, x + step) - f(p, x), 2));
+    }
+
+    // -----------------
     return ans;
   }
 
