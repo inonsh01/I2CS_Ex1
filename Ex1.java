@@ -229,11 +229,24 @@ public class Ex1 {
    */
   public static double sameValue(double[] p1, double[] p2, double x1, double x2, double eps) {
     double ans = x1;
-    /**
-     * add you code below
-     * 
-     * ///////////////////
-     */
+    // add you code below
+    // ----------------
+
+    // define two double vars
+    double ax1, ax2;
+
+    // loop all over the range between x1 to x2, every step is small
+    for (double x = x1; x <= x2; x += eps) {
+      // result of current x at each function
+      ax1 = f(p1, x);
+      ax2 = f(p2, x);
+
+      // if they close enough x is the solution
+      if (Math.abs(ax1 - ax2) < eps) {
+        ans = x;
+      }
+    }
+    // ----------------
     return ans;
   }
 
