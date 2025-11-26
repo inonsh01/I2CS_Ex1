@@ -276,6 +276,8 @@ public class Ex1 {
    */
   public static double[] getPolynomFromString(String p) {
     double[] ans = ZERO;// -1.0x^2 +3.0x +2.0
+    // add you code below
+    // ------------------
 
     // split the sring by spaces to create array of values of the polynom
     String[] strArr = p.split("\\s+");
@@ -298,7 +300,6 @@ public class Ex1 {
 
       // if degree is 0 or 1
       if (polItem.length == 1) {
-
         // if degree is 1
         if (polItem[0].contains("x")) {
           // if 1 degree is at index 0 add to the first 0
@@ -346,11 +347,7 @@ public class Ex1 {
       }
     }
 
-    /**
-     * add you code below
-     * 
-     * ///////////////////
-     */
+    // ------------------
     return ans;
   }
 
