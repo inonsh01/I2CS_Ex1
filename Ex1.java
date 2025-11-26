@@ -1,5 +1,7 @@
 //package assignments.Ex1;
 
+import java.util.Arrays;
+
 /**
  * Introduction to Computer Science 2026, Ariel University,
  * Ex1: arrays, static functions and JUnit
@@ -105,11 +107,44 @@ public class Ex1 {
    */
   public static boolean equals(double[] p1, double[] p2) {
     boolean ans = true;
-    /**
-     * add you code below
-     * 
-     * ///////////////////
-     */
+    // add you code below
+    // -------------------
+
+    // checking edge cases
+
+    // if they both empty they equals by definition
+    if (p1 == null && p2 == null) {
+      return true; // they are equals, return true.
+    }
+
+    // get the shorter polynom
+    int minLength = Math.min(p1.length, p2.length);
+    // loop on every index until the end of the shorter and compare them, if one of
+    // them not equals to other -
+    // they are not equals
+    for (int i = 0; i < minLength; i++) {
+      // if only one of them (xor) zero they are not in the same degree so they are
+      // not equals.
+      // or if they are in the same degree check that the diffrence not bigger then
+      // epsilon.
+      if ((p1[i] == 0 && p2[i] != 0) || (p1[i] != 0 && p2[i] == 0) || (Math.abs(p1[i] - p2[i]) > EPS)) {
+        ans = false;
+      }
+    }
+
+    // if the length of each not equals to the other
+    if (p1.length != p2.length) {
+
+      // if the rest of the longer polynom is zeroes they are still equals -
+      // for example: p([1,2]) = p([1,2,0,0]).
+      // so we need to check if all the indexes are zeroes in the longer polynom
+      // after the length of the short one.
+      if (!isAllZero((p1.length > p2.length) ? p1 : p2, minLength)) {
+        return false;
+      }
+    }
+
+    // ------------------
     return ans;
   }
 
@@ -126,11 +161,29 @@ public class Ex1 {
     if (poly.length == 0) {
       ans = "0";
     } else {
-      /**
-       * add you code below
-       * 
-       * ///////////////////
-       */
+      // add you code below
+      // -------------------
+
+      // loop over the polynom from the last one to the first
+      for (int i = poly.length - 1; i >= 0; i--) {
+        if (i == 0) {
+          // the last (x ^ 0) will be just the number because it multiple by 1
+          ans += poly[i];
+        } else if (i == 1) {
+          // the (x ^ 1) will be just the number multuple with x
+          ans += poly[i] + "x ";
+        } else {
+          // other will be with multiple by x^i
+          ans += poly[i] + "x^" + i + " ";
+        }
+        // if the next is positive add "+" (otherwise keep the minus)
+        if (i > 1 && poly[i - 1] > 0) {
+          ans += "+";
+        }
+
+      }
+
+      // -------------------
     }
     return ans;
   }
@@ -223,6 +276,76 @@ public class Ex1 {
    */
   public static double[] getPolynomFromString(String p) {
     double[] ans = ZERO;// -1.0x^2 +3.0x +2.0
+
+    // split the sring by spaces to create array of values of the polynom
+    String[] strArr = p.split("\\s+");
+
+    // assuming that the degrees writing by order from the biggest to the smallest
+    // get the max degree by extracting the first element degree
+    int maxDegree = Integer.parseInt(strArr[0].split("x\\^")[1]);
+
+    // create new array with the size of to max degree + 1 (because the 0 degree)
+    ans = new double[maxDegree + 1];
+
+    // create integer to keep the current index of the answer array.
+    int ansCurrIndex = 0;
+
+    // loop all over the polynom in reverse order
+    for (int i = strArr.length - 1; i >= 0; i--) {
+
+      // split every element by x and ^ to split the coefficient of x and the degree
+      String[] polItem = strArr[i].split("x\\^");
+
+      // if degree is 0 or 1
+      if (polItem.length == 1) {
+
+        // if degree is 1
+        if (polItem[0].contains("x")) {
+          // if 1 degree is at index 0 add to the first 0
+          if (ansCurrIndex == 0) {
+            ans[0] = 0;
+          }
+          // insert the coefficient without "x" or "+" or spaces
+          ans[1] = Double.parseDouble(polItem[0].replaceAll("[ +x]", ""));
+          // promote two steps forward
+          ansCurrIndex = 2;
+
+          // if degree is 0
+        } else {
+          // insert just the variable
+          ans[0] = Double.parseDouble(polItem[0]);
+          // promote one step forward
+          ansCurrIndex = 1;
+        }
+
+        // if degree is bigger then 1
+      } else {
+        // casting for current degree and current coefficient (without "+" or spaces)
+        double currCeo = Double.parseDouble(polItem[0].replaceAll("[ +]", ""));
+        int currDeg = Integer.parseInt(polItem[1]);
+
+        // if the degree is in the right index just insert the coefficient
+        if (ansCurrIndex == currDeg) {
+          ans[ansCurrIndex] = currCeo;
+        } else {
+          // loop from answer current index until current degree
+          for (int j = ansCurrIndex; j < currDeg + 1; j++) {
+            // if currDeg is at the right index insert it
+            if (j == currDeg) {
+              ans[ansCurrIndex] = currCeo;
+
+              // otherwise put zero in every cell
+            } else {
+              ans[ansCurrIndex] = 0;
+            }
+
+            // promote one step forward
+            ansCurrIndex++;
+          }
+        }
+      }
+    }
+
     /**
      * add you code below
      * 
@@ -240,12 +363,33 @@ public class Ex1 {
    * @return
    */
   public static double[] add(double[] p1, double[] p2) {
-    double[] ans = ZERO;//
-    /**
-     * add you code below
-     * 
-     * ///////////////////
-     */
+    double[] ans = ZERO;
+    // add you code below
+    // ---------------
+
+    // define the length of the longer polynom
+    int maxLength = Math.max(p1.length, p2.length);
+
+    // create new array with the correct size
+    ans = new double[maxLength];
+
+    // loop over the length of the longer polynom
+    for (int i = 0; i < maxLength; i++) {
+      // if p1[i] not exist insert just p2[i] to ans[i]
+      if (p1.length - 1 < i) {
+        ans[i] = p2[i];
+
+        // if p2[i] not exist insert just p1[i] to ans[i]
+      } else if (p2.length - 1 < i) {
+        ans[i] = p1[i];
+
+        // if p1[i] and p2[i] exist just add them
+      } else {
+        ans[i] = p1[i] + p2[i];
+      }
+    }
+
+    // ---------------
     return ans;
   }
 
@@ -259,11 +403,22 @@ public class Ex1 {
    */
   public static double[] mul(double[] p1, double[] p2) {
     double[] ans = ZERO;//
-    /**
-     * add you code below
-     * 
-     * ///////////////////
-     */
+    // add you code below
+    // ---------------
+
+    // create new array with the correct size
+    ans = new double[p1.length + p2.length - 1];
+
+    // loop over all polynom 1
+    for (int i = 0; i < p1.length; i++) {
+      // loop over all polynom 2
+      for (int j = 0; j < p2.length; j++) {
+        // multiply p[i] and p2[j] and add it to corrent ans[i+j]
+        ans[i + j] += p1[i] * p2[j];
+      }
+    }
+
+    // ---------------
     return ans;
   }
 
@@ -275,11 +430,49 @@ public class Ex1 {
    */
   public static double[] derivative(double[] po) {
     double[] ans = ZERO;//
-    /**
-     * add you code below
-     * 
-     * ///////////////////
-     */
+    // add you code below
+    // ---------------
+
+    // edge cases:
+    // assuming that po is not empty
+    // otherwise if(po.length == 0) return [0]
+    // if the polynom's max degree is 0 return just [0]
+    if (po.length == 1) {
+      return ans;
+    }
+
+    // otherwise create new array with correct length (while derivativing
+    // the length of degrees drops by 1)
+    ans = new double[po.length - 1];
+
+    // skip above the first one (at 0 degrees)
+    for (int i = 1; i < po.length; i++) {
+      // insert to every cell the derivative of the next index. for example
+      // [a,x,2x,2x] -> [x,4x,6x]
+      ans[i - 1] = po[i] * i;
+    }
+
+    // --------------
     return ans;
+  }
+
+  /**
+   * Check if all the values in the array are zero
+   * 
+   * @param po the polynomial function represented as an array of doubles
+   * @param in the index to start checking from
+   * @return Boolean value indicating whether all values in the array are zero or
+   *         not
+   */
+  public static boolean isAllZero(double[] po, int in) {
+    // looping over the array from give index
+    for (int i = in; i < po.length; i++) {
+      // if exist value that isn't 0 return false
+      if (po[i] != 0) {
+        return false;
+      }
+    }
+    // all the values are 0, return true
+    return true;
   }
 }

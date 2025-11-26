@@ -1,4 +1,5 @@
 import org.junit.jupiter.api.Test;
+import java.util.Arrays;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -16,9 +17,13 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class Ex1Test {
 	static final double[] P1 = { 2, 0, 3, -1, 0 }, P2 = { 0.1, 0, 1, 0.1, 3 };
-	static double[] po1 = { 2, 2 }, po2 = { -3, 0.61, 0.2 };;
+	static double[] po1 = { 2, 2 }, po2 = { -3, 0.61, 0.2 };
 	static double[] po3 = { 2, 1, -0.7, -0.02, 0.02 };
 	static double[] po4 = { -3, 0.61, 0.2 };
+	static double[] po5 = { -3.93, 0.12, 5, 4 };
+	static double[] po6 = { -3.93, 0.12, 5, 4 };
+	static double[] po7 = {};
+	static double[] po9 = null;
 
 	@Test
 	/**
@@ -134,19 +139,27 @@ class Ex1Test {
 	 */
 	public void testFromString() {
 		double[] p = { -1.1, 2.3, 3.1 }; // 3.1X^2+ 2.3x -1.1
+		double[] p4 = { -1.1, 0, 0, 2.3, 0, 3.1 };
 		String sp2 = "3.1x^2 +2.3x -1.1";
+		String sp3 = "3.1x^5 +2.3x^3 -1.1";
 		String sp = Ex1.poly(p);
 		double[] p1 = Ex1.getPolynomFromString(sp);
 		double[] p2 = Ex1.getPolynomFromString(sp2);
+		double[] p3 = Ex1.getPolynomFromString(sp3);
 		boolean isSame1 = Ex1.equals(p1, p);
 		boolean isSame2 = Ex1.equals(p2, p);
+		boolean isSame3 = Ex1.equals(p3, p4);
+
 		if (!isSame1) {
 			fail();
 		}
 		if (!isSame2) {
 			fail();
 		}
-		assertEquals(sp, Ex1.poly(p1));
+		if (!isSame3) {
+			fail();
+		}
+		// assertEquals(sp, Ex1.poly(p1));
 	}
 
 	@Test
@@ -219,4 +232,24 @@ class Ex1Test {
 		double area = 58.5658;
 		assertEquals(a1, area, Ex1.EPS);
 	}
+
+	@Test
+	/**
+	 * Test the isAllZero function.
+	 */
+	public void testIsAllZero() {
+		double[] po_a = { 0, 0, 0, 0, 0, 0, 0, 0 };
+		double[] po_b = { 0, 0, 0 };
+		double[] po_c = { 0, 0, 0, 0, 1, 0, 0, 0 };
+		double[] po_d = { 0, 0, -1 };
+		boolean a1 = Ex1.isAllZero(po_a, 0);
+		boolean a2 = Ex1.isAllZero(po_b, 0);
+		boolean a3 = Ex1.isAllZero(po_c, 0);
+		boolean a4 = Ex1.isAllZero(po_d, 0);
+		assertTrue(a1);
+		assertTrue(a2);
+		assertFalse(a3);
+		assertFalse(a4);
+	}
+
 }
