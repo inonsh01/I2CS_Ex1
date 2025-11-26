@@ -252,4 +252,28 @@ class Ex1Test {
 		assertFalse(a4);
 	}
 
+	@Test
+	/**
+	 * Test the PolynomFromPoints function.
+	 */
+	public void testPolynomFromPoints() {
+		double[] xx_a = { 0, 1, -1 };
+		double[] yy_a = { 0, 1, 1 };
+		double[] pol_a = { 0.0, 0.0, 1.0 };
+
+		double[] xx_b = { 0, 1, 4 };
+		double[] yy_b = { 3, 0, 3 };
+		double[] pol_b = { 3, -4, 1 };
+
+		double[] xx_c = { 0, 1, -1 };
+		double[] yy_c = { 0, 1, 1, 4 };
+
+		double[] p1 = Ex1.PolynomFromPoints(xx_a, yy_a);
+		double[] p2 = Ex1.PolynomFromPoints(xx_b, yy_b);
+		double[] p3 = Ex1.PolynomFromPoints(xx_c, yy_c);
+
+		assertArrayEquals(p1, pol_a, Ex1.EPS);
+		assertArrayEquals(p2, pol_b, Ex1.EPS);
+		assertEquals(p3, null);
+	}
 }

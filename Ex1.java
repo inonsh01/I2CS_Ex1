@@ -87,12 +87,38 @@ public class Ex1 {
     int lx = xx.length;
     int ly = yy.length;
     if (xx != null && yy != null && lx == ly && lx > 1 && lx < 4) {
-      /**
-       * add you code below
-       * 
-       * ///////////////////
-       */
+      // add you code below
+      // ----------------
+
+      // define every given point in the right place (xx[0] -> x1 etc.)
+      double x1 = xx[0], x2 = xx[1], x3 = xx[2], y1 = yy[0], y2 = yy[1], y3 = yy[2];
+
+      // denominator of the equations
+      double denom = (x1 - x2) * (x1 - x3) * (x2 - x3);
+
+      // if the denominator is too close to 0 return null
+      if (Math.abs(denom) < EPS) {
+        return null;
+      }
+
+      // algorithem to calculate A,B,C.
+      // to be honest i understood the code but not really the math behind it.
+      double A = (x3 * (y2 - y1) + x2 * (y1 - y3) + x1 * (y3 - y2)) / denom;
+      double B = (Math.pow(x3, 2) * (y1 - y2) + Math.pow(x2, 2) * (y3 - y1) + Math.pow(x1, 2) * (y2 - y3)) / denom;
+      double C = (x2 * x3 * (x2 - x3) * y1 + x3 * x1 * (x3 - x1) * y2 + x1 * x2 * (x1 - x2) * y3) / denom;
+
+      ans = new double[] { C, B, A };
+
+      // to avoid cases like -0.0 etc.
+      for (int i = 0; i < ans.length; i++) {
+        if (Math.abs(ans[i]) < EPS) {
+          ans[i] = 0;
+        }
+      }
+
+      // ----------------
     }
+
     return ans;
   }
 
