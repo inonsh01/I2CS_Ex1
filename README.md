@@ -4,8 +4,6 @@
 
 Compute Introduction - Exercise 1
 
-[gui]: ./GUI.jpeg "EX1 GUI"
-
 ## Overview
 
 This project implements a set of static methods for polynomial function operations. Polynomials are represented as arrays of doubles where the array `{0.1, 0, -3, 0.2}` represents the polynomial function: `0.2x^3 -3x^2 + 0x^1 + 0.1`.
@@ -48,3 +46,9 @@ This project implements a set of static methods for polynomial function operatio
 - JUnit 5
 
 All JAR files are included in the `lib/` directory.
+
+## Images
+
+- Ex1_GUI output
+
+[gui]: ./GUI.jpeg "EX1 GUI"
