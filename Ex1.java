@@ -326,8 +326,8 @@ public class Ex1 {
       currX = x1 + (step * i);
       nextX = currX + step;
 
-      // if on of them small then 0
-      if (f(subPol, currX) * f(subPol, nextX) < 0) {
+      // if there's a sign change (root crossing)
+      if (f(subPol, currX) * f(subPol, nextX) <= 0) {
 
         // find the root of the substract polynomial function
         double r = root_rec(subPol, currX, nextX, 0.0001);
