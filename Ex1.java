@@ -232,20 +232,13 @@ public class Ex1 {
     // add you code below
     // ----------------
 
-    // define two double vars
-    double ax1, ax2;
+    // To find where two polynomails is with the same value
+    // (up to epsilon) at some range,
+    // we can subtract them and check when the value of
+    // subtracted polynomail at x is close to epsilon (root).
+    double[] subPol = subtract(p1, p2);
+    ans = root_rec(subPol, x1, x2, eps);
 
-    // loop all over the range between x1 to x2, every step is small
-    for (double x = x1; x <= x2; x += eps) {
-      // result of current x at each function
-      ax1 = f(p1, x);
-      ax2 = f(p2, x);
-
-      // if they close enough x is the solution
-      if (Math.abs(ax1 - ax2) < eps) {
-        ans = x;
-      }
-    }
     // ----------------
     return ans;
   }
