@@ -49,4 +49,4 @@ All JAR files are included in the `lib/` directory.
 
 - Ex1_GUI output
 
-![EX1 GUI](./GUI.jpeg)
+![EX1 GUI](./GUI.png)
